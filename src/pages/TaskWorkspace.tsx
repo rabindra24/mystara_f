@@ -6,11 +6,22 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload, FileText } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useTask } from "@/contexts/TaskContext";
+
+import { v1 as uuidv1 } from "uuid";
+import { createItem, getAllItems } from "@/api/task";
 
 const TaskWorkspace = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [taskName, setTaskName] = useState("New Analysis Task");
+  const { create } = useTask();
+  // id: string, name: string, keyfield: string[], status: string, timestamp: string)
+
+  const [name, setName] = useState("New Analysis Task");
+  const [keyfields, setKeyFields] = useState([]);
+  const [status, setStatus] = useState("active");
+  const [timestamp, setTimestamp] = useState("");
+
   const [files, setFiles] = useState<File[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,9 +37,14 @@ const TaskWorkspace = () => {
     event.preventDefault();
 
     const formData = new FormData();
+    formData.append("name", name);
+    formData.append("keyfield", JSON.stringify(keyfields));
+    formData.append("status", status);
     files.forEach((file) => {
       formData.append("files", file); // 'files' is the field name the backend expects
     });
+
+    console.log("Form Data:", formData);
 
     try {
       const response = await axios.post(
@@ -44,15 +60,37 @@ const TaskWorkspace = () => {
         title: "Sucessfully Uploaded",
         description: "Friday, February 10, 2023 at 5:57 PM",
       });
+      handleAdd();
+
+      // if (files.length > 0) {
+      //   navigate("/processing");
+      // }
+
       console.log("Upload successful:", response.data);
     } catch (error) {
       toast({
         title: "Sucessfully Uploaded",
         description: "Friday, February 10, 2023 at 5:57 PM",
       });
+      handleAdd();
+
+      if (files.length > 0) {
+        navigate("/processing");
+      }
       console.error("Error uploading files:", error);
     }
   };
+
+  const handleKeyfields = (e: string) => {
+    const data = e.split(",");
+    setKeyFields(data);
+  };
+
+  async function handleAdd() {
+    if (!name) return;
+    await createItem({ name: name, keyfield: keyfields, status: status });
+    setName("");
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,10 +111,26 @@ const TaskWorkspace = () => {
             </Label>
             <Input
               id="taskName"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="text-2xl font-bold mt-2 h-auto py-3"
             />
+          </div>
+          <div>
+            <Label htmlFor="keyfields" className="text-lg">
+              Key Fields
+            </Label>
+            <Input
+              id="keyfields"
+              value={keyfields}
+              onChange={(e) => handleKeyfields(e.target.value)}
+              className="text-2xl font-bold mt-2 h-auto py-3"
+            />
+            <div className="flex flex-row ">
+              {keyfields.map((item) => (
+                <div className="mr-2 bg-primary text-white mt-2 font-bold  py-2 px-5 rounded-full ">{`${item}`}</div>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-4">
