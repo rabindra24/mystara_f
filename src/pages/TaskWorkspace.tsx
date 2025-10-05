@@ -62,11 +62,10 @@ const TaskWorkspace = () => {
       });
       handleAdd();
 
-      // if (files.length > 0) {
-      //   navigate("/processing");
-      // }
-
       console.log("Upload successful:", response.data);
+      // if (files.length > 0) {
+      navigate("/processing");
+      // }
     } catch (error) {
       toast({
         title: "Sucessfully Uploaded",

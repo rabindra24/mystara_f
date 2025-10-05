@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/items"; // change if backend is deployed
+const API_URL = "http://localhost:3333/api/items"; // change if backend is deployed
 
 // ✅ Create
 export async function createItem(item) {

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, Users, TrendingUp } from "lucide-react";
+import Pricing from "@/components/our/Pricing";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -65,6 +66,8 @@ const Landing = () => {
           </div>
         </div>
       </main>
+
+      
     </div>
   );
 };

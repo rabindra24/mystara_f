@@ -32,7 +32,7 @@ const Dashboard = () => {
   const { logout } = useAuth();
   const { tasks } = useTask();
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState([...mockTasks]);
 
   // console.log(tasks);
 

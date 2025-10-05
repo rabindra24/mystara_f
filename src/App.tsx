@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import axios from "axios";
 import { useState } from "react";
 import { TaskProvider } from "./contexts/TaskContext";
+import PdfUploader from "./components/our/Extract";
 
 const queryClient = new QueryClient();
 
@@ -75,5 +76,13 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+
+// const App = () => {
+//   return (
+//     <div>
+//       <PdfUploader />
+//     </div>
+//   );
+// };
 
 export default App;
